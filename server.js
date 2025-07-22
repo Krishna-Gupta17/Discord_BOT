@@ -40,3 +40,8 @@ client.on("messageCreate",async(message)=>{
 
 
 client.login(process.env.BOT_LOGIN);
+
+const express = require('express');
+const app = express();
+app.get('/', (req, res) => res.send('Bot is running'));
+app.listen(process.env.PORT || 3000);
