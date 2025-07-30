@@ -81,7 +81,12 @@ if (record) {
   if (!thread && content ==="ready") {
     try {
       // Fetch the hidden parent channel
-const parentChannel = await client.channels.fetch(process.env.PARENT_CHANNEL_ID); // 👈 Add your hidden text channel ID to .env
+  const parentChannel = await client.channels.fetch(process.env.PARENT_CHANNEL_ID);
+  if (!parentChannel) {
+    console.log("❌ Parent channel not found.");
+    return message.reply("⚠️ Unable to find the parent channel. Please check `PARENT_CHANNEL_ID`.");
+
+  console.log("✅ Parent channel found:", parentChannel.name);
 
 thread = await parentChannel.threads.create({
   name: `${user.username}-chat`,
