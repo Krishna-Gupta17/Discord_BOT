@@ -143,7 +143,6 @@ await thread.setInvitable(false); // 🚫 User can't invite others
 
 
 client.login(process.env.BOT_LOGIN);
-
 const express = require('express');
 const app = express();
 app.get('/', (req, res) => res.send('Bot is running'));
