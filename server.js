@@ -101,7 +101,7 @@ if (record) {
 );
       const shortId = res.data.shortId;
       console.log(shortId);
-            return thread.send(`🔗 Shortened URL: ${process.env.SERVER_URL}/URL/${shortId}`);
+            return thread.send(`🔗 Shortened URL: ${process.env.SERVER_URL}/BOT/${shortId}`);
   } catch (err) {
       console.error("URL shortening failed:", err);
       return thread.send("⚠️ Failed to shorten the URL.");
