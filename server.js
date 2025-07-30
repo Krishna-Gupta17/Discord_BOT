@@ -1,3 +1,10 @@
+process.on("unhandledRejection", (err) => {
+  console.error("🔥 Unhandled Rejection:", err);
+});
+process.on("uncaughtException", (err) => {
+  console.error("💥 Uncaught Exception:", err);
+});
+
 require("dotenv").config();
 const { getToken } = require('./botlogin');
 const {main}=require("./ai");
@@ -142,8 +149,14 @@ await thread.setInvitable(false); // 🚫 User can't invite others
 });
 
 
-client.login(process.env.BOT_LOGIN);
+client.login(process.env.BOT_LOGIN)
+  .then(() => console.log("✅ Logged into Discord"))
+  .catch((err) => console.error("❌ Discord login failed:", err));
+
+
 const express = require('express');
 const app = express();
 app.get('/', (req, res) => res.send('Bot is running'));
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`🌐 Express is running on port ${process.env.PORT || 3000}`);
+});
