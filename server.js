@@ -25,6 +25,23 @@ client.once("ready", () => {
   console.log(`🤖 Bot logged in as ${client.user.tag}`);
 });
 
+client.on("threadDelete", async (thread) => {
+  try {
+    const deleted = await ThreadModel.findOneAndDelete({ threadId: thread.id });
+    if (deleted) {
+      console.log(`🗑️ Deleted thread from DB for user ${deleted.username} (${deleted.userId})`);
+    } else {
+      console.log(`🗑️ Thread ${thread.id} deleted, but no DB record found.`);
+    }
+  } catch (err) {
+    console.error("Failed to clean up thread from DB:", err);
+  }
+});
+
+
+
+
+
 client.on("messageCreate",async(message)=>{
   if(message.author.bot || !message.guild)  return;  // reply khud ko hi reply deta rahega
   const user = message.author; //2
@@ -56,14 +73,20 @@ if (record) {
   // Create thread if not found or archived
   if (!thread && content ==="ready") {
     try {
-      thread = await message.startThread({
-        name: `${user.username}-chat`,
-        autoArchiveDuration: 60,
-        type: ChannelType.PrivateThread,
-        reason: 'Private user thread'
-      });
+      // Fetch the hidden parent channel
+const parentChannel = await client.channels.fetch(process.env.PARENT_CHANNEL_ID); // 👈 Add your hidden text channel ID to .env
 
-      await thread.members.add(user.id);
+thread = await parentChannel.threads.create({
+  name: `${user.username}-chat`,
+  autoArchiveDuration: 60,
+  type: ChannelType.PrivateThread,
+  reason: 'Private user thread'
+});
+
+await thread.members.add(user.id);
+await thread.setLocked(true);     // 🚫 No joining without invite
+await thread.setInvitable(false); // 🚫 User can't invite others
+
 
        await ThreadModel.findOneAndUpdate(
         { userId: user.id },
@@ -76,8 +99,9 @@ if (record) {
         },
         { upsert: true, new: true }
       );
-
+      await message.reply(`📬 Your private thread is ready: <https://discord.com/channels/${message.guild.id}/${thread.id}>`);
       await thread.send(`👋 Hello ${user.username}, welcome to your private thread!`);
+          return;
     } catch (err) {
       console.error("Thread creation failed:", err);
       return message.reply(" Unable to create thread.");
@@ -101,7 +125,7 @@ if (record) {
 );
       const shortId = res.data.shortId;
       console.log(shortId);
-            return thread.send(`🔗 Shortened URL: ${process.env.SERVER_URL}/BOT/${shortId}`);
+            return thread.send(`🔗 Shortened URL: ${process.env.SERVER_URL}/URL/${shortId}`);
   } catch (err) {
       console.error("URL shortening failed:", err);
       return thread.send("⚠️ Failed to shorten the URL.");
