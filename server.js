@@ -85,7 +85,7 @@ if (record) {
   if (!parentChannel) {
     console.log("❌ Parent channel not found.");
     return message.reply("⚠️ Unable to find the parent channel. Please check `PARENT_CHANNEL_ID`.");
-
+  }
   console.log("✅ Parent channel found:", parentChannel.name);
 
 thread = await parentChannel.threads.create({
