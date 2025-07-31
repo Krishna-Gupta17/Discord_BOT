@@ -91,7 +91,7 @@ thread = await parentChannel.threads.create({
 });
 
 await thread.members.add(user.id);
-await thread.setLocked(true);     
+// await thread.setLocked(true);     
 await thread.setInvitable(false); 
   await ThreadModel.findOneAndUpdate(
         { userId: user.id },
