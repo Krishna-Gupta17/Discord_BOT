@@ -20,7 +20,16 @@ const threadSchema = new mongoose.Schema({
 
 const ThreadModel = mongoose.model("UserThread", threadSchema);
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent] });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMessageReactions,
+    GatewayIntentBits.GuildMembers
+  ]
+});
+
 
 client.on("threadDelete", async (thread) => {
   try {
