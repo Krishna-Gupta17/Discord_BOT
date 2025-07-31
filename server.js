@@ -1,10 +1,3 @@
-process.on("unhandledRejection", (err) => {
-  console.error("🔥 Unhandled Rejection:", err);
-});
-process.on("uncaughtException", (err) => {
-  console.error("💥 Uncaught Exception:", err);
-});
-
 require("dotenv").config();
 const { getToken } = require('./botlogin');
 const {main}=require("./ai");
@@ -28,9 +21,6 @@ const threadSchema = new mongoose.Schema({
 const ThreadModel = mongoose.model("UserThread", threadSchema);
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent] });
-client.once("ready", () => {
-  console.log(`🤖 Bot logged in as ${client.user.tag}`);
-});
 
 client.on("threadDelete", async (thread) => {
   try {
@@ -45,16 +35,12 @@ client.on("threadDelete", async (thread) => {
   }
 });
 
-
-
-
-
 client.on("messageCreate",async(message)=>{
   if(message.author.bot || !message.guild)  return;  // reply khud ko hi reply deta rahega
-  const user = message.author; //2
+  const user = message.author; 
   const content = message.content.trim();
   let thread;//4
-  const record = await ThreadModel.findOne({ userId: user.id });//5
+  const record = await ThreadModel.findOne({ userId: user.id });
 if (record) {
   try {
     thread = await message.guild.channels.fetch(record.threadId);
@@ -96,11 +82,9 @@ thread = await parentChannel.threads.create({
 });
 
 await thread.members.add(user.id);
-await thread.setLocked(true);     // 🚫 No joining without invite
-await thread.setInvitable(false); // 🚫 User can't invite others
-
-
-       await ThreadModel.findOneAndUpdate(
+await thread.setLocked(true);     
+await thread.setInvitable(false); 
+  await ThreadModel.findOneAndUpdate(
         { userId: user.id },
         {
           userId: user.id,
@@ -162,6 +146,6 @@ client.login(process.env.BOT_LOGIN)
 const express = require('express');
 const app = express();
 app.get('/', (req, res) => res.send('Bot is running'));
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT, () => {
   console.log(`🌐 Express is running on port ${process.env.PORT || 3000}`);
 });
