@@ -83,6 +83,13 @@ if (record) {
   }
   console.log("✅ Parent channel found:", parentChannel.name);
 
+  if (!parentChannel || !parentChannel.isTextBased()) {
+  console.error("❌ Parent channel not found or not text-based");
+  return;
+}
+console.log(parentChannel.permissionsFor(client.user).toArray());
+console.log(`Channel type: ${parentChannel.type}`);
+
 thread = await parentChannel.threads.create({
   name: `${user.username}-chat`,
   autoArchiveDuration: 60,
