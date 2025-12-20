@@ -162,6 +162,14 @@ client.login(process.env.BOT_LOGIN)
 const express = require('express');
 const app = express();
 app.get('/', (req, res) => res.send('Bot is running'));
+app.get('/ping', (req, res) => {
+  res.send('pong')
+});
+
 app.listen(process.env.PORT, () => {
-  console.log(`🌐 Express is running on port ${process.env.PORT || 3000}`);
+   setInterval(() => {
+    fetch('https://discord-bot-i0wl.onrender.com/ping')
+      .then(() => console.log('Pinged self!'))
+      .catch(() => console.log('Self ping failed.'));
+});
 });
