@@ -154,9 +154,6 @@ await thread.setInvitable(false);
 });
 
 
-client.login(process.env.BOT_LOGIN)
-  .then(() => console.log("✅ Logged into Discord"))
-  .catch((err) => console.error("❌ Discord login failed:", err));
 
 
 const express = require('express');
@@ -165,10 +162,15 @@ app.get('/', (req, res) => res.send('Bot is running'));
 app.get('/ping', (req, res) => {
   res.send('pong')
 });
-
+async function connect() {
+  await client.login(process.env.BOT_LOGIN)
+  .then(() => console.log("✅ Logged into Discord"))
+  .catch((err) => console.error("❌ Discord login failed:", err));
+}
+connect();
 app.listen(process.env.PORT, () => {
   setInterval(() => {
-    fetch('https://discord-bot-tza9.onrender.com/ping')
+    fetch('https://discord-bot-i0wl.onrender.com/ping')
       .then(() => console.log('Pinged self!'))
       .catch(() => console.log('Self ping failed.'));
   }, 1000 * 60 * 10);
