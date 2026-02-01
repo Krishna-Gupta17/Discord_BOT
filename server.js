@@ -168,10 +168,11 @@ app.get('/ping', (req, res) => {
 
 app.listen(process.env.PORT, () => {
   setInterval(() => {
-    fetch('https://discord-bot-tza9.onrender.com/ping')
+    fetch('https://discord-bot-1-6pyg.onrender.com/ping')
       .then(() => console.log('Pinged self!'))
       .catch(() => console.log('Self ping failed.'));
   }, 1000 * 60 * 10);
 });
+
 
 
