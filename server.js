@@ -35,8 +35,7 @@ async function connect() {
   console.log(`✅ ${DISCORD_TOKEN}`);
   
   await client.login(DISCORD_TOKEN)
-  .then(() => console.log("✅ Logged into Discord"))
-  .catch((err) => console.error("❌ Discord login failed:", err));
+  console.log("✅ Logged into Discord");
 }
 connect();
 client.on("threadDelete", async (thread) => {
