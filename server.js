@@ -29,15 +29,8 @@ const client = new Client({
     GatewayIntentBits.GuildMembers
   ]
 });
-async function connect() {
-  const DISCORD_TOKEN=process.env.BOT_LOGIN;
-  console.log(DISCORD_TOKEN);
-  console.log(`✅ ${DISCORD_TOKEN}`);
-  
-  await client.login(DISCORD_TOKEN)
-  console.log("✅ Logged into Discord");
-}
-connect();
+
+
 client.on("threadDelete", async (thread) => {
   try {
     const deleted = await ThreadModel.findOneAndDelete({ threadId: thread.id });
@@ -161,6 +154,9 @@ await thread.setInvitable(false);
 });
 
 
+client.login(process.env.BOT_LOGIN)
+  .then(() => console.log("✅ Logged into Discord"))
+  .catch((err) => console.error("❌ Discord login failed:", err));
 
 
 const express = require('express');
@@ -170,7 +166,12 @@ app.get('/ping', (req, res) => {
   res.send('pong')
 });
 
-app.listen(process.env.PORT, () => console.log('server up'));
-
+app.listen(process.env.PORT, () => {
+  setInterval(() => {
+    fetch('https://discord-bot-tza9.onrender.com/ping')
+      .then(() => console.log('Pinged self!'))
+      .catch(() => console.log('Self ping failed.'));
+  }, 1000 * 60 * 10);
+});
 
 
