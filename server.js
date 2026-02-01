@@ -8,16 +8,7 @@ const { Client, GatewayIntentBits, ChannelType } = require('discord.js');
 mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
-async function connect() {
-  const DISCORD_TOKEN=process.env.BOT_LOGIN;
-  console.log(DISCORD_TOKEN);
-  console.log(`✅ ${DISCORD_TOKEN}`);
-  
-  await client.login(DISCORD_TOKEN)
-  .then(() => console.log("✅ Logged into Discord"))
-  .catch((err) => console.error("❌ Discord login failed:", err));
-}
-connect();
+
 // Define schema and model for threads
 const threadSchema = new mongoose.Schema({
   userId: String,
@@ -38,7 +29,16 @@ const client = new Client({
     GatewayIntentBits.GuildMembers
   ]
 });
-
+async function connect() {
+  const DISCORD_TOKEN=process.env.BOT_LOGIN;
+  console.log(DISCORD_TOKEN);
+  console.log(`✅ ${DISCORD_TOKEN}`);
+  
+  await client.login(DISCORD_TOKEN)
+  .then(() => console.log("✅ Logged into Discord"))
+  .catch((err) => console.error("❌ Discord login failed:", err));
+}
+connect();
 client.on("threadDelete", async (thread) => {
   try {
     const deleted = await ThreadModel.findOneAndDelete({ threadId: thread.id });
